@@ -36,12 +36,12 @@ namespace XdtTransform.ViewModel
         {
             ServiceLocator.SetLocatorProvider(() => SimpleIoc.Default);
             SimpleIoc.Default.Register<MainWindowVM>();
-            SimpleIoc.Default.Register<ConfigLoaderVM>();
+            SimpleIoc.Default.Register<ConfigLoaderVm>();
         }
 
         public MainWindowVM Main => ServiceLocator.Current.GetInstance<MainWindowVM>();
 
-        public ConfigLoaderVM ConfigLoader => ServiceLocator.Current.GetInstance<ConfigLoaderVM>(Guid.NewGuid().ToString());
+        public ConfigLoaderVm ConfigLoader => ServiceLocator.Current.GetInstance<ConfigLoaderVm>(Guid.NewGuid().ToString());
         
         public static void Cleanup()
         {

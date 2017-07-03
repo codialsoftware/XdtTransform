@@ -1,7 +1,6 @@
 using System.IO;
 using System.Windows;
 using System.Windows.Documents;
-using System.Windows.Markup;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
@@ -10,11 +9,12 @@ using XdtTransform.Messages;
 
 namespace XdtTransform.ViewModel
 {
-    public class ConfigLoaderVM : ViewModelBase
+    public class ConfigLoaderVm : ViewModelBase
     {
+        private readonly FlowDocument _flowDocument = new FlowDocument();
         private string _filePath;
 
-        public ConfigLoaderVM()
+        public ConfigLoaderVm()
         {
             OpenFile = new RelayCommand(Open);
         }
@@ -28,6 +28,23 @@ namespace XdtTransform.ViewModel
         {
             get => _filePath;
             set => Set(ref _filePath, value, true);
+        }
+
+        public FlowDocument Document
+        {
+            get
+            {
+                if (File.Exists(FilePath))
+                {
+                    var range = new TextRange(_flowDocument.ContentStart, _flowDocument.ContentEnd);
+                    using (var stream = new FileStream(FilePath, FileMode.Open))
+                    {
+                        range.Load(stream, DataFormats.Text);
+                    }
+                }
+
+                return _flowDocument;
+            }
         }
 
         private void Open()
@@ -45,24 +62,6 @@ namespace XdtTransform.ViewModel
             {
                 FilePath = FilePath
             });
-        }
-
-        private readonly FlowDocument _flowDocument = new FlowDocument();
-        public FlowDocument Document
-        {
-            get
-            {
-                if (File.Exists(FilePath))
-                {
-                    var range = new TextRange(_flowDocument.ContentStart, _flowDocument.ContentEnd);
-                    using (var stream = new FileStream(FilePath, FileMode.Open))
-                    {
-                        range.Load(stream, DataFormats.Text);
-                    }
-                }
-
-                return _flowDocument;
-            }
         }
     }
 }
