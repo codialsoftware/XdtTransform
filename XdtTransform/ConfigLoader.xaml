@@ -15,9 +15,8 @@
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
 
-            <TextBox Grid.Column="0" Text="{Binding FilePath, Mode=TwoWay}"/>
-            <Button Grid.Column="1" Content="Open..."
-                Command="{Binding Open}" CommandParameter="{Binding FilePath}" />
+            <TextBlock Grid.Column="0" Text="{Binding FilePath, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"/>
+            <Button Grid.Column="1" Content="Open..." Command="{Binding OpenFile}" />
         </Grid>
         
         <TextBlock TextWrapping="Wrap" />

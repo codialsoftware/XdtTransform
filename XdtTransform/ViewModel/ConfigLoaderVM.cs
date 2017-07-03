@@ -2,6 +2,7 @@ using System.IO;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
+using Microsoft.Win32;
 using XdtTransform.Messages;
 
 namespace XdtTransform.ViewModel
@@ -12,13 +13,13 @@ namespace XdtTransform.ViewModel
 
         public ConfigLoaderVM()
         {
-            OpenFile = new RelayCommand<string>(Open);
+            OpenFile = new RelayCommand(Open);
         }
 
         /// <summary>
         ///     Initializes a new instance of the MainViewModel class.
         /// </summary>
-        public RelayCommand<string> OpenFile { get; }
+        public RelayCommand OpenFile { get; }
 
         public string FilePath
         {
@@ -26,16 +27,20 @@ namespace XdtTransform.ViewModel
             set => Set(ref _filePath, value, true);
         }
 
-        private void Open(string path)
+        private void Open()
         {
-            if (File.Exists(path))
+            var dialog = new OpenFileDialog
             {
-                FilePath = path;
-                Messenger.Default.Send(new FileOpened
-                {
-                    FilePath = FilePath
-                });
-            }
+                Multiselect = false,
+                Filter = "Config file (.config)|*.config|XML File (.xml)|*.xml"
+            };
+            if (dialog.ShowDialog() != true) return;
+
+            FilePath = dialog.FileName;
+            Messenger.Default.Send(new FileOpened
+            {
+                FilePath = FilePath
+            });
         }
     }
 }

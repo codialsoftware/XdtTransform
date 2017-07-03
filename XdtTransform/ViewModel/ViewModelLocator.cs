@@ -41,7 +41,7 @@ namespace XdtTransform.ViewModel
 
         public MainWindowVM Main => ServiceLocator.Current.GetInstance<MainWindowVM>();
 
-        public ConfigLoaderVM ConfigLoader => ServiceLocator.Current.GetInstance<ConfigLoaderVM>();
+        public ConfigLoaderVM ConfigLoader => ServiceLocator.Current.GetInstance<ConfigLoaderVM>(Guid.NewGuid().ToString());
         
         public static void Cleanup()
         {
