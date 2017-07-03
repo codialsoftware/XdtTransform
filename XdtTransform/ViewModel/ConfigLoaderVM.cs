@@ -55,7 +55,7 @@ namespace XdtTransform.ViewModel
 
             FilePath = dialog.FileName;
             RaisePropertyChanged(() => Document);
-            Messenger.Default.Send(new FileOpened
+            MessengerInstance.Send(new FileOpened
             {
                 FilePath = FilePath
             });
