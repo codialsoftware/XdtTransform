@@ -18,8 +18,9 @@
             <TextBlock Grid.Column="0" Text="{Binding FilePath, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"/>
             <Button Grid.Column="1" Content="Open..." Command="{Binding OpenFile}" />
         </Grid>
-        
-        <TextBlock TextWrapping="Wrap" />
+
+        <FlowDocumentReader ViewingMode="Scroll" Document="{Binding Document, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
+        </FlowDocumentReader>
     </DockPanel>
 </UserControl>
 

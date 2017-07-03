@@ -1,4 +1,7 @@
 using System.IO;
+using System.Windows;
+using System.Windows.Documents;
+using System.Windows.Markup;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
@@ -37,10 +40,29 @@ namespace XdtTransform.ViewModel
             if (dialog.ShowDialog() != true) return;
 
             FilePath = dialog.FileName;
+            RaisePropertyChanged(() => Document);
             Messenger.Default.Send(new FileOpened
             {
                 FilePath = FilePath
             });
+        }
+
+        private readonly FlowDocument _flowDocument = new FlowDocument();
+        public FlowDocument Document
+        {
+            get
+            {
+                if (File.Exists(FilePath))
+                {
+                    var range = new TextRange(_flowDocument.ContentStart, _flowDocument.ContentEnd);
+                    using (var stream = new FileStream(FilePath, FileMode.Open))
+                    {
+                        range.Load(stream, DataFormats.Text);
+                    }
+                }
+
+                return _flowDocument;
+            }
         }
     }
 }
