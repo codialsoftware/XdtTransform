@@ -19,15 +19,12 @@ namespace XdtTransform.ViewModel
             OpenFile = new RelayCommand(Open);
         }
 
-        /// <summary>
-        ///     Initializes a new instance of the MainViewModel class.
-        /// </summary>
         public RelayCommand OpenFile { get; }
 
         public string FilePath
         {
             get => _filePath;
-            set => Set(ref _filePath, value, true);
+            private set => Set(ref _filePath, value, true);
         }
 
         public FlowDocument Document
