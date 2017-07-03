@@ -19,8 +19,11 @@
             <Button Grid.Column="1" Content="Open..." Command="{Binding OpenFile}" />
         </Grid>
 
-        <FlowDocumentReader ViewingMode="Scroll" Document="{Binding Document, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
-        </FlowDocumentReader>
+        <FlowDocumentReader 
+            Document="{Binding Document, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" 
+            ViewingMode="Scroll" IsPageViewEnabled ="False" IsTwoPageViewEnabled="False"
+            FontFamily="Courier" FontSize="9"
+            />
     </DockPanel>
 </UserControl>
 
