@@ -71,6 +71,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Messages\FileOpened.cs" />
+    <Compile Include="Messages\FileType.cs" />
     <Compile Include="ViewModel\ConfigLoaderVm.cs" />
     <Compile Include="ViewModel\MainWindowVM.cs" />
     <Compile Include="ViewModel\ViewModelLocator.cs" />

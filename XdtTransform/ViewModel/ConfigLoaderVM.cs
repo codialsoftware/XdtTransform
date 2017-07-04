@@ -3,7 +3,6 @@ using System.Windows;
 using System.Windows.Documents;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
-using GalaSoft.MvvmLight.Messaging;
 using Microsoft.Win32;
 using XdtTransform.Messages;
 
@@ -20,6 +19,7 @@ namespace XdtTransform.ViewModel
         }
 
         public RelayCommand OpenFile { get; }
+        public FileType Type { get; set; }
 
         public string FilePath
         {
