@@ -23,8 +23,11 @@
         <local:ConfigLoader FileType="{x:Static messages:FileType.Source}" Grid.Column="0" Grid.Row="0" />
         <local:ConfigLoader FileType="{x:Static messages:FileType.Transformation}" Grid.Column="2" Grid.Row="0" />
 
-        <TextBlock Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="2" />
-            
+        <FlowDocumentReader Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="2"
+            Document="{Binding Document, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" 
+            ViewingMode="Scroll" IsPageViewEnabled ="False" IsTwoPageViewEnabled="False"
+            FontFamily="Courier" FontSize="9" />
+
         <GridSplitter Grid.Column="1" Grid.Row="0" Width="5" HorizontalAlignment="Stretch"/>
         <GridSplitter Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="3" Height="5" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"/>
     </Grid>
