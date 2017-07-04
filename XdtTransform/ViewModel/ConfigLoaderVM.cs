@@ -57,7 +57,8 @@ namespace XdtTransform.ViewModel
             RaisePropertyChanged(() => Document);
             MessengerInstance.Send(new FileOpened
             {
-                FilePath = FilePath
+                FilePath = FilePath,
+                Type = Type
             });
         }
     }

@@ -1,47 +1,75 @@
-using System.Threading;
+using System;
+using System.Windows.Documents;
 using GalaSoft.MvvmLight;
-using GalaSoft.MvvmLight.Command;
-using GalaSoft.MvvmLight.Messaging;
 using XdtTransform.Messages;
+using System.IO;
+using System.Windows;
+using Microsoft.Web.XmlTransform;
 
 namespace XdtTransform.ViewModel
 {
-    /// <summary>
-    /// This class contains properties that the main View can data bind to.
-    /// <para>
-    /// Use the <strong>mvvminpc</strong> snippet to add bindable properties to this ViewModel.
-    /// </para>
-    /// <para>
-    /// You can also use Blend to data bind with the tool's support.
-    /// </para>
-    /// <para>
-    /// See http://www.galasoft.ch/mvvm
-    /// </para>
-    /// </summary>
-    public class MainWindowVM : ViewModelBase
+    public class MainWindowVm : ViewModelBase
     {
         /// <summary>
-        /// Initializes a new instance of the MainViewModel class.
+        ///     Initializes a new instance of the MainViewModel class.
         /// </summary>
-        public RelayCommand<string> OpenFile { get; private set; }
-
-        public MainWindowVM()
+        public MainWindowVm()
         {
-            OpenFile = new RelayCommand<string>(Open);
+            MessengerInstance.Register<FileOpened>(this, true, OnFileOpened);
         }
 
-        public string FilePath { get; private set; }
+        public FlowDocument Document { get; } = new FlowDocument();
 
-        void Open(string path)
+        private string _sourceFilePath;
+        private string _transformationFilePath;
+
+        private void OnFileOpened(FileOpened message)
         {
-            if (System.IO.File.Exists(path))
+            StoreFilePath(value => _sourceFilePath = value, message, FileType.Source);
+            StoreFilePath(value => _transformationFilePath = value, message, FileType.Transformation);
+            TransformFile();
+        }
+
+        private void TransformFile()
+        {
+            if (!File.Exists(_sourceFilePath) || !File.Exists(_transformationFilePath))
+                return;
+
+            using (var source = new XmlTransformableDocument())
+            using (var transformation = new XmlTransformation(_transformationFilePath))
             {
-                FilePath = path;
-                Messenger.Default.Send<FileOpened>(new FileOpened
-                {
-                    FilePath = FilePath
-                });
+                source.PreserveWhitespace = true;
+                source.Load(_sourceFilePath);
+                DisplayDocument(TransformFile(source, transformation));
             }
+        }
+
+        private void DisplayDocument(Stream content)
+        {
+            if (content == null) return;
+
+            var range = new TextRange(Document.ContentStart, Document.ContentEnd);
+            range.Load(content, DataFormats.Text);
+        }
+
+        private Stream TransformFile(XmlTransformableDocument sourceFilePath, XmlTransformation transformationFilePath)
+        {
+            if (transformationFilePath.Apply(sourceFilePath))
+            {
+                var result = new MemoryStream();
+                sourceFilePath.Save(result);
+                return result;
+            }
+
+            return null;
+        }
+
+        private void StoreFilePath(Action<string> actionWhenMessageOfType, FileOpened message, FileType propertyType)
+        {
+            if (message.Type != propertyType)
+                return;
+
+            actionWhenMessageOfType(message.FilePath);
         }
     }
 }

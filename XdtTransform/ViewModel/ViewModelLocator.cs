@@ -35,11 +35,11 @@ namespace XdtTransform.ViewModel
         public ViewModelLocator()
         {
             ServiceLocator.SetLocatorProvider(() => SimpleIoc.Default);
-            SimpleIoc.Default.Register<MainWindowVM>();
+            SimpleIoc.Default.Register<MainWindowVm>();
             SimpleIoc.Default.Register<ConfigLoaderVm>();
         }
 
-        public MainWindowVM Main => ServiceLocator.Current.GetInstance<MainWindowVM>();
+        public MainWindowVm Main => ServiceLocator.Current.GetInstance<MainWindowVm>();
 
         public ConfigLoaderVm ConfigLoader => ServiceLocator.Current.GetInstance<ConfigLoaderVm>(Guid.NewGuid().ToString());
         
